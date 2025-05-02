@@ -1,3 +1,6 @@
+package org.aplicacao.RequestSecurit;
+//Esta classe seta o metodo get Nome e Id das cidades
+ //
 public class CidadesSecurity {
     private String id ;
 
