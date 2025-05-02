@@ -1,0 +1,9 @@
+package org.aplicacao.RequestSecurit;
+//Esta classe seta o metodo get Token
+public class LoginSecurity {
+    private String token;
+
+    public String getToken() {
+        return token;
+    }
+}
