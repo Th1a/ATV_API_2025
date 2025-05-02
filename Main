@@ -1,0 +1,23 @@
+package org.aplicacao;
+
+import org.aplicacao.serviços.LoginService;
+import org.aplicacao.serviços.CidadesService;
+
+public class Main {
+    public static void main(String[] args) {
+
+       String token = LoginService.Logar("324149373@ulife.com.br","jm0g6FToQM0l");
+
+        if (token != null ) {
+
+            System.out.println("Token: " + token);
+
+
+             CidadesService.getCidades(token);
+
+        } else {
+
+            System.out.println("Erro ao obter token.");
+        }
+    }
+}
