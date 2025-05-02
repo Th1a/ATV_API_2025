@@ -1,0 +1,61 @@
+package org.aplicacao.serviços;
+
+import com.google.gson.Gson;
+import org.aplicacao.RequestSecurit.LoginSecurity;
+
+
+import javax.swing.*;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+
+//essa classe faz é reposavel por garantir que a requisição seja executada de forma eficiente.
+
+public class LoginService {
+
+
+
+    public  static String Logar(String email,String password)  {
+
+        try {
+            //String do Formato Json
+            String json = """
+            {
+                "email": "%s",
+                "password": "%s"
+            }
+            """.formatted(email, password);// Serve para formatar os dados
+            HttpClient client = HttpClient.newHttpClient();//Classe ClieteHTTP instanciada, Serve para o cliente fazer as requisições
+            HttpRequest request = HttpRequest.newBuilder()//Classe Request Http, é a classe responsanvel para fazer as requisições
+            .uri(URI.create("http://137.184.108.252:5000/api/login"))//recebe o URl
+            .header("Content-Type","application/json")// No header , essa função atua nesses nos atributos Content-Type e application/json , para  conseguir pegar o token
+                    .POST(HttpRequest.BodyPublishers.ofString(json))// Metodo POST
+                    .build();//Construção da Classe concluida
+
+
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());// Responsavel pele requisição do cliente.
+
+            if(response.statusCode() == 200){// Condição que verifica o Status da conexão , na qual se for = a 200:
+                System.out.println("Situação:" + response.statusCode());// printa a mensagem
+                Gson gson = new Gson();//Cria a classe Gson , que converte Json pra Java e vice versa
+                LoginSecurity loginRequest = gson.fromJson(response.body(), LoginSecurity.class);//Instancia a classe Login Security para realizar o get Token
+                return loginRequest.getToken();//Retorna o Token
+
+            }else{//isso se de errado
+                System.out.println("Erro ao fazer login " + response.statusCode());
+                JOptionPane.showMessageDialog(null, "Erro ao fazer login " + response.statusCode());
+                return null;
+            }
+
+
+        }catch (Exception e){//caso houver Exception
+        System.out.println("Exceção : " +e);
+        return null;
+
+            }
+        }
+    }
+
