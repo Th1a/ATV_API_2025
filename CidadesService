@@ -1,0 +1,58 @@
+package org.aplicacao.serviços;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import org.aplicacao.RequestSecurit.CidadesSecurity;
+
+import java.lang.reflect.Type;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.List;
+
+
+public class CidadesService {
+
+
+
+    public static void  getCidades(String token)  {
+
+        try {
+
+            HttpClient client = HttpClient.newHttpClient();//Classe ClieteHTTP instanciada, Serve para o cliente fazer as requisições
+            HttpRequest request = HttpRequest.newBuilder()//Constrói a requisição HTTP POST
+                    .uri(URI.create("http://137.184.108.252:5000/api/cidades"))// Url da api
+                    .header("x-access-token",token)// Dentro da api , O x-access age como uma senha , que é desbolqueado pelo token
+                    .GET()//Metodo get
+                    .build();//construção Do request
+
+
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());// Responsavel pele requisição do cliente.
+
+            if(response.statusCode() == 200){// Condição que verifica o Status da conexão , na qual se for = a 200:
+
+                Gson gson = new Gson();//Cria a classe Gson , que converte Json pra Java e vice versa
+                Type cidadeListType = new TypeToken<List<CidadesSecurity>>() {}.getType();// Cria um Type representando uma lista do tipo CidadesSecurity
+                List<CidadesSecurity> cidades = gson.fromJson(response.body(), cidadeListType);// Converte o JSON da resposta em uma lista de objetos CidadesSecurity
+
+                System.out.println("CIDADES:");
+                for (CidadesSecurity cidade : cidades) {
+                    System.out.println("ID: " + cidade.getId() + " - Nome: " + cidade.getNome());
+                }
+
+
+
+            }else{
+                System.out.println("Cod Error: " + response.statusCode());
+            }
+
+
+
+        }catch (Exception e){
+            System.out.println("Exceção : " +e);
+
+        }
+    }
+}
