@@ -21,7 +21,7 @@ public class CidadesService {
         try {
 
             HttpClient client = HttpClient.newHttpClient();//Classe ClieteHTTP instanciada, Serve para o cliente fazer as requisições
-            HttpRequest request = HttpRequest.newBuilder()//Constrói a requisição HTTP POST
+            HttpRequest request = HttpRequest.newBuilder()//Constrói a requisição HTTP GET
                     .uri(URI.create("http://137.184.108.252:5000/api/cidades"))// Url da api
                     .header("x-access-token",token)// Dentro da api , O x-access age como uma senha , que é desbolqueado pelo token
                     .GET()//Metodo get
